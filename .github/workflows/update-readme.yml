@@ -1,5 +1,5 @@
-# Updated GitHub Action that reads titles from YAML frontmatter instead of the first markdown heading
-updated_workflow_content = """
+# Updated GitHub Action with improved pattern using start/end markers and YAML frontmatter extraction
+enhanced_workflow_content = """
 name: Update Script Index
 
 on:
@@ -37,13 +37,17 @@ jobs:
             const content = fs.readFileSync(path.join(__dirname, f), 'utf8');
             const match = content.match(/^---\\n([\\s\\S]*?)\\n---/);
             let title = '(No Title)';
+            let description = '';
             if (match) {
-              const frontmatter = yaml.load(match[1]);
-              if (frontmatter && frontmatter.title) {
-                title = frontmatter.title;
+              try {
+                const frontmatter = yaml.load(match[1]);
+                if (frontmatter && frontmatter.title) title = frontmatter.title;
+                if (frontmatter && frontmatter.description) description = frontmatter.description;
+              } catch (err) {
+                console.error("YAML Parse Error in file:", f);
               }
             }
-            return `| [${f}](./${f}) | ${title} |`;
+            return `| [${f}](./${f}) | ${description || title} |`;
           });
 
           const tableHeader = "| Script Name | Description |\\n|-------------|-------------|";
@@ -51,8 +55,8 @@ jobs:
 
           const readme = fs.readFileSync(readmePath, 'utf8');
           const updatedReadme = readme.replace(
-            /## 📜 Available Scripts[\\s\\S]*?(?=\\n## |\\n##\\s*$|$)/,
-            `## 📜 Available Scripts\\n\\n${table}`
+            /<!-- script-list-start -->[\\s\\S]*<!-- script-list-end -->/,
+            `<!-- script-list-start -->\\n${table}\\n<!-- script-list-end -->`
           ).replace(
             /<!-- updated-badge-start -->[\\s\\S]*?<!-- updated-badge-end -->/,
             `<!-- updated-badge-start -->\\n![Last Updated](https://img.shields.io/github/last-commit/${process.env.GITHUB_REPOSITORY}?label=Last%20Updated)\\n<!-- updated-badge-end -->`
@@ -70,7 +74,7 @@ jobs:
           git push
 """
 
-# Overwrite the existing workflow file with the updated version
-workflow_file_path.write_text(updated_workflow_content)
+# Save the improved workflow file
+workflow_file_path.write_text(enhanced_workflow_content)
 
 workflow_file_path.name
