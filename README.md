@@ -24,7 +24,7 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 <!-- script-list-start -->
 | Script Name | Description |
 |-------------|-------------|
-| *(More coming soon)* | Airtable + Signable, TikTok, Instagram Reels, GPT-powered data tagging, and more |
+| [Airtable ⇄ Webflow Item Fetcher](airtable-webflow-fetch-item.md) | test Fetch Webflow CMS item field values into Airtable using the Webflow v2 API. |
 <!-- script-list-end -->
 
 ---
