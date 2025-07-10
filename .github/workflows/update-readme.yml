@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   update-readme:
@@ -16,30 +15,26 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Get full git history
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # OPTIONAL: Only include if your script depends on external npm packages
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          fi
 
       - name: Generate Script Index
-        run: |
-          node .github/scripts/generate-readme.js || exit 1
-          echo "Generated README:"
-          head -n 20 README.md  # Show first 20 lines for debugging
+        run: node .github/scripts/generate-readme.js
 
       - name: Commit and Push Changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase
-          git diff --quiet && git diff --staged --quiet || {
-            git add README.md
-            git commit -m "📚 Auto-update script index in README"
-            git push
-          }
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add README.md
+          git commit -m '🔄 Auto-update script index'
+          git push
