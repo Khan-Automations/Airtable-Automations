@@ -24,6 +24,7 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 <!-- script-list-start -->
 | Script Name | Description |
 |-------------|-------------|
+| [Airtable ⇄ Algolia Record Uploader](airtable-to-algolia-record-uploader.md) | Update or upload records from Airtable to Algolia using the Algolia REST API within Airtable Automations. |
 | [Airtable ⇄ Webflow Item Fetcher](airtable-webflow-fetch-item.md) | Fetch Webflow CMS item field values into Airtable using the Webflow v2 API. |
 | [Airtable → Webhook Payload Sender](airtable-webhook-payload-sender.md) | Send selected Airtable record field values as a POST request to a webhook URL for integration with external services. |
 <!-- script-list-end -->
