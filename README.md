@@ -1,3 +1,4 @@
+
 # 🔧 Airtable Automation Script Hub
 
 A curated collection of **real-world Airtable scripts** I’ve written for automating business workflows, integrating external APIs, and solving platform-specific challenges — all tested in production environments.
@@ -21,10 +22,18 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 
 ## 📜 Available Scripts
 
+<!-- script-list-start -->
 | Script Name | Description |
 |-------------|-------------|
-| [`airtable-webflow-fetch-item.md`](./airtable-webflow-fetch-item.md) | Fetch specific CMS fields from a Webflow item using the Webflow v2 API |
 | *(More coming soon)* | Airtable + Signable, TikTok, Instagram Reels, GPT-powered data tagging, and more |
+<!-- script-list-end -->
+
+---
+
+## 🕒 Last Update
+
+<!-- updated-badge-start -->
+<!-- updated-badge-end -->
 
 ---
 
