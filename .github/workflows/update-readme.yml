@@ -1,0 +1,76 @@
+# Updated GitHub Action that reads titles from YAML frontmatter instead of the first markdown heading
+updated_workflow_content = """
+name: Update Script Index
+
+on:
+  push:
+    paths:
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install js-yaml
+
+      - name: Generate Script Index
+        run: |
+          node <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const yaml = require('js-yaml');
+
+          const readmePath = path.join(__dirname, 'README.md');
+          const files = fs.readdirSync(__dirname).filter(f => f.endsWith('.md') && f !== 'README.md');
+
+          const rows = files.map(f => {
+            const content = fs.readFileSync(path.join(__dirname, f), 'utf8');
+            const match = content.match(/^---\\n([\\s\\S]*?)\\n---/);
+            let title = '(No Title)';
+            if (match) {
+              const frontmatter = yaml.load(match[1]);
+              if (frontmatter && frontmatter.title) {
+                title = frontmatter.title;
+              }
+            }
+            return `| [${f}](./${f}) | ${title} |`;
+          });
+
+          const tableHeader = "| Script Name | Description |\\n|-------------|-------------|";
+          const table = [tableHeader, ...rows].join('\\n');
+
+          const readme = fs.readFileSync(readmePath, 'utf8');
+          const updatedReadme = readme.replace(
+            /## 📜 Available Scripts[\\s\\S]*?(?=\\n## |\\n##\\s*$|$)/,
+            `## 📜 Available Scripts\\n\\n${table}`
+          ).replace(
+            /<!-- updated-badge-start -->[\\s\\S]*?<!-- updated-badge-end -->/,
+            `<!-- updated-badge-start -->\\n![Last Updated](https://img.shields.io/github/last-commit/${process.env.GITHUB_REPOSITORY}?label=Last%20Updated)\\n<!-- updated-badge-end -->`
+          );
+
+          fs.writeFileSync(readmePath, updatedReadme);
+          EOF
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add README.md
+          git commit -m '📜 Auto-update script index and badge in README.md' || echo "No changes to commit"
+          git push
+"""
+
+# Overwrite the existing workflow file with the updated version
+workflow_file_path.write_text(updated_workflow_content)
+
+workflow_file_path.name
