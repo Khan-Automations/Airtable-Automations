@@ -25,6 +25,7 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 | Script Name | Description |
 |-------------|-------------|
 | [Airtable ⇄ Webflow Item Fetcher](airtable-webflow-fetch-item.md) | Fetch Webflow CMS item field values into Airtable using the Webflow v2 API. |
+| [Airtable → Webhook Payload Sender](airtable-webhook-payload-sender.md) | Send selected Airtable record field values as a POST request to a webhook URL for integration with external services. |
 <!-- script-list-end -->
 
 ---
