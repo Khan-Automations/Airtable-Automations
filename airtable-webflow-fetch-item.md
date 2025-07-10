@@ -1,5 +1,7 @@
 ---
-title: ✅ Airtable Script: Fetch Webflow Item Data via API
+title: "Airtable ⇄ Webflow Item Fetcher"
+description: "Fetch Webflow CMS item field values into Airtable using the Webflow v2 API."
+tags: [airtable, webflow, api, automation]
 ---
 
 # Airtable ⇄ Webflow Item Fetcher
