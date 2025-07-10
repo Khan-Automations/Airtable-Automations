@@ -1,5 +1,3 @@
-# Create a new GitHub Action workflow that recursively scans all .md files and logs which ones it processes
-recursive_workflow_content = """
 name: Update Script Index
 
 on:
