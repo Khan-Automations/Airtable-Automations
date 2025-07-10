@@ -1,9 +1,11 @@
+# Create a new GitHub Action workflow that recursively scans all .md files and logs which ones it processes
+recursive_workflow_content = """
 name: Update Script Index
 
 on:
   push:
     paths:
-      - '*.md'
+      - '**/*.md'
   workflow_dispatch:
 
 permissions:
@@ -24,31 +26,48 @@ jobs:
       - name: Install Dependencies
         run: npm install js-yaml
 
-      - name: Generate Script Index
+      - name: Generate Script Index (Recursive)
         run: |
           node <<'EOF'
           const fs = require('fs');
           const path = require('path');
           const yaml = require('js-yaml');
 
-          const readmePath = path.join(__dirname, 'README.md');
-          const files = fs.readdirSync(__dirname).filter(f => f.endsWith('.md') && f !== 'README.md');
+          function getAllMarkdownFiles(dirPath, arrayOfFiles = []) {
+            const files = fs.readdirSync(dirPath);
+            files.forEach(function(file) {
+              const fullPath = path.join(dirPath, file);
+              if (fs.statSync(fullPath).isDirectory()) {
+                arrayOfFiles = getAllMarkdownFiles(fullPath, arrayOfFiles);
+              } else if (file.endsWith('.md') && file !== 'README.md') {
+                arrayOfFiles.push(fullPath);
+              }
+            });
+            return arrayOfFiles;
+          }
 
-          const rows = files.map(f => {
-            const content = fs.readFileSync(path.join(__dirname, f), 'utf8');
+          const readmePath = path.join(__dirname, 'README.md');
+          const markdownFiles = getAllMarkdownFiles(__dirname);
+
+          console.log("✅ Found markdown files:");
+          markdownFiles.forEach(f => console.log(" -", f));
+
+          const rows = markdownFiles.map(filePath => {
+            const content = fs.readFileSync(filePath, 'utf8');
             const match = content.match(/^---\\n([\\s\\S]*?)\\n---/);
             let title = '(No Title)';
             let description = '';
             if (match) {
               try {
                 const frontmatter = yaml.load(match[1]);
-                if (frontmatter && frontmatter.title) title = frontmatter.title;
-                if (frontmatter && frontmatter.description) description = frontmatter.description;
+                if (frontmatter?.title) title = frontmatter.title;
+                if (frontmatter?.description) description = frontmatter.description;
               } catch (err) {
-                console.error("YAML Parse Error in file:", f);
+                console.error("⚠️ YAML error in", filePath, ":", err.message);
               }
             }
-            return `| [${f}](./${f}) | ${description || title} |`;
+            const fileName = path.relative(__dirname, filePath).replace(/\\\\/g, '/');
+            return `| [${fileName}](./${fileName}) | ${description || title} |`;
           });
 
           const tableHeader = "| Script Name | Description |\\n|-------------|-------------|";
@@ -71,5 +90,13 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add README.md
-          git commit -m '📜 Auto-update script index and badge in README.md' || echo "No changes to commit"
+          git commit -m '📜 Auto-update script index and badge (recursive scan)' || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push
+"""
+
+# Save the updated workflow
+recursive_workflow_path = Path("/mnt/data/update-readme.yml")
+recursive_workflow_path.write_text(recursive_workflow_content)
+
+recursive_workflow_path.name
