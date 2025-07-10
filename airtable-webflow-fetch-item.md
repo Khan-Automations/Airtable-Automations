@@ -1,5 +1,5 @@
 ---
-✅ Airtable Script: Fetch Webflow Item Data via API
+title: ✅ Airtable Script: Fetch Webflow Item Data via API
 ---
 
 # Airtable ⇄ Webflow Item Fetcher
