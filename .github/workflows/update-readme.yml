@@ -1,5 +1,3 @@
-# Updated GitHub Action with improved pattern using start/end markers and YAML frontmatter extraction
-enhanced_workflow_content = """
 name: Update Script Index
 
 on:
@@ -72,9 +70,3 @@ jobs:
           git add README.md
           git commit -m '📜 Auto-update script index and badge in README.md' || echo "No changes to commit"
           git push
-"""
-
-# Save the improved workflow file
-workflow_file_path.write_text(enhanced_workflow_content)
-
-workflow_file_path.name
