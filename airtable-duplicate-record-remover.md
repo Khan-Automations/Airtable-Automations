@@ -38,7 +38,7 @@ let { fieldIds, keep, sortFieldId } = input.config();
 let matchFields = fieldIds.split(',').map(f => f.trim());
 
 // Load table and records
-let table = base.getTable(cursor.activeTableId);
+let table = base.getTable("Your Table Name or ID");
 let query = await table.selectRecordsAsync();
 
 // Grouping map
