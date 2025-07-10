@@ -7,7 +7,7 @@ tags: [airtable, webhook, api, automation]
 # 📤 Send Airtable Record as Webhook Payload
 
 ## Description
-This Airtable Automation script sends a POST request to a specified webhook URL with selected record field values as a JSON payload. It's ideal for integrating Airtable with services like Make.com, Zapier, n8n, or custom APIs.
+This Airtable Automation script sends a POST request to a specified webhook URL with selected record field values as a JSON payload.
 
 ## Instructions
 
