@@ -1,6 +1,6 @@
 ---
 title: "Airtable ⇄ Webflow Item Fetcher"
-description: "test Fetch Webflow CMS item field values into Airtable using the Webflow v2 API."
+description: "Fetch Webflow CMS item field values into Airtable using the Webflow v2 API."
 tags: [airtable, webflow, api, automation]
 ---
 
