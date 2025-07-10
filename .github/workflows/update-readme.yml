@@ -22,79 +22,15 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install js-yaml
+        run: npm ci
 
-      - name: Generate Script Index (Recursive)
-        run: |
-          node <<'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          const yaml = require('js-yaml');
-
-          function getAllMarkdownFiles(dirPath, arrayOfFiles = []) {
-            const files = fs.readdirSync(dirPath);
-            files.forEach(function(file) {
-              const fullPath = path.join(dirPath, file);
-              if (fs.statSync(fullPath).isDirectory()) {
-                arrayOfFiles = getAllMarkdownFiles(fullPath, arrayOfFiles);
-              } else if (file.endsWith('.md') && file !== 'README.md') {
-                arrayOfFiles.push(fullPath);
-              }
-            });
-            return arrayOfFiles;
-          }
-
-          const readmePath = path.join(__dirname, 'README.md');
-          const markdownFiles = getAllMarkdownFiles(__dirname);
-
-          console.log("✅ Found markdown files:");
-          markdownFiles.forEach(f => console.log(" -", f));
-
-          const rows = markdownFiles.map(filePath => {
-            const content = fs.readFileSync(filePath, 'utf8');
-            const match = content.match(/^---\\n([\\s\\S]*?)\\n---/);
-            let title = '(No Title)';
-            let description = '';
-            if (match) {
-              try {
-                const frontmatter = yaml.load(match[1]);
-                if (frontmatter?.title) title = frontmatter.title;
-                if (frontmatter?.description) description = frontmatter.description;
-              } catch (err) {
-                console.error("⚠️ YAML error in", filePath, ":", err.message);
-              }
-            }
-            const fileName = path.relative(__dirname, filePath).replace(/\\\\/g, '/');
-            return `| [${fileName}](./${fileName}) | ${description || title} |`;
-          });
-
-          const tableHeader = "| Script Name | Description |\\n|-------------|-------------|";
-          const table = [tableHeader, ...rows].join('\\n');
-
-          const readme = fs.readFileSync(readmePath, 'utf8');
-          const updatedReadme = readme.replace(
-            /<!-- script-list-start -->[\\s\\S]*<!-- script-list-end -->/,
-            `<!-- script-list-start -->\\n${table}\\n<!-- script-list-end -->`
-          ).replace(
-            /<!-- updated-badge-start -->[\\s\\S]*?<!-- updated-badge-end -->/,
-            `<!-- updated-badge-start -->\\n![Last Updated](https://img.shields.io/github/last-commit/${process.env.GITHUB_REPOSITORY}?label=Last%20Updated)\\n<!-- updated-badge-end -->`
-          );
-
-          fs.writeFileSync(readmePath, updatedReadme);
-          EOF
+      - name: Generate Script Index
+        run: node .github/scripts/generate-readme.js
 
       - name: Commit and Push Changes
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m '📜 Auto-update script index and badge (recursive scan)' || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git diff --cached --quiet || git commit -m "📚 Auto-update script index"
           git push
-"""
-
-# Save the updated workflow
-recursive_workflow_path = Path("/mnt/data/update-readme.yml")
-recursive_workflow_path.write_text(recursive_workflow_content)
-
-recursive_workflow_path.name
