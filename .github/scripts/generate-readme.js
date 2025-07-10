@@ -2,29 +2,45 @@ const fs = require('fs');
 const path = require('path');
 
 const baseDir = '.';
-const outputFile = 'README.md';
-const sectionHeader = '## 📂 Available Scripts';
+const readmePath = 'README.md';
+const sectionStart = '| Script Name | Description |';
+const sectionEnd = '|---'; // optional, fallback marker
 
-function getScriptEntries(dir) {
-  const files = fs.readdirSync(dir);
-  return files
-    .filter(file => file.endsWith('.md') && file !== 'README.md')
+function extractTitleAndDescription(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const title = (content.match(/title:\s*["'](.+?)["']/i) || [])[1] || path.basename(filePath);
+  const description = (content.match(/description:\s*["'](.+?)["']/i) || [])[1] || '';
+  return { title, description };
+}
+
+function getMarkdownRows() {
+  return fs.readdirSync(baseDir)
+    .filter(f => f.endsWith('.md') && f !== 'README.md')
     .map(file => {
-      const content = fs.readFileSync(path.join(dir, file), 'utf-8');
-      const titleMatch = content.match(/title:\s*["'](.+)["']/i);
-      const title = titleMatch ? titleMatch[1] : file;
-      return `- [${title}](${file})`;
+      const { title, description } = extractTitleAndDescription(path.join(baseDir, file));
+      return `| [${title}](${file}) | ${description} |`;
     });
 }
 
-// Read the current README.md
-const currentReadme = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, 'utf-8') : '';
-const [beforeSection] = currentReadme.split(sectionHeader);
+function updateReadme() {
+  const original = fs.readFileSync(readmePath, 'utf8');
+  const lines = original.split('\n');
 
-// Generate the new section
-const entries = getScriptEntries(baseDir);
-const newSection = `${sectionHeader}\n\n${entries.join('\n')}\n`;
+  const startIdx = lines.findIndex(l => l.trim() === sectionStart);
+  const endIdx = lines.findIndex((l, i) => i > startIdx && l.startsWith('|') === false);
 
-const finalContent = `${beforeSection.trim()}\n\n${newSection}`;
-fs.writeFileSync(outputFile, finalContent);
-console.log('✅ README.md updated without removing existing content');
+  if (startIdx === -1) {
+    console.error('❌ Table start marker not found.');
+    return;
+  }
+
+  const before = lines.slice(0, startIdx + 2); // include header and separator row
+  const after = lines.slice(endIdx !== -1 ? endIdx : lines.length);
+
+  const tableRows = getMarkdownRows();
+  const updated = [...before, ...tableRows, ...after].join('\n');
+  fs.writeFileSync(readmePath, updated);
+  console.log('✅ README.md updated with script rows in the table.');
+}
+
+updateReadme();
