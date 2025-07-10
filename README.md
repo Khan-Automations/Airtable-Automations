@@ -24,6 +24,7 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 <!-- script-list-start -->
 | Script Name | Description |
 |-------------|-------------|
+| [Extract og:image URL from Web Page](airtable-og-image-extractor.md) | This Airtable automation script fetches a given web page and extracts the value of its Open Graph image (og:image) meta tag for use in downstream steps. |
 | [Airtable ⇄ Algolia Record Uploader](airtable-to-algolia-record-uploader.md) | Update or upload records from Airtable to Algolia using the Algolia REST API within Airtable Automations. |
 | [Airtable ⇄ Webflow Item Fetcher](airtable-webflow-fetch-item.md) | Fetch Webflow CMS item field values into Airtable using the Webflow v2 API. |
 | [Airtable → Webhook Payload Sender](airtable-webhook-payload-sender.md) | Send selected Airtable record field values as a POST request to a webhook URL for integration with external services. |
