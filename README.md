@@ -69,4 +69,6 @@ All scripts are shared for educational and portfolio purposes. Please test and m
 
 ## 📂 Available Scripts
 
+<!-- script-list-start -->
 - [Airtable ⇄ Webflow Item Fetcher](airtable-webflow-fetch-item.md)
+<!-- script-list-end -->
