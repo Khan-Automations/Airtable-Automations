@@ -51,6 +51,28 @@ I'm a certified Airtable Builder + Automation Expert with deep experience integr
 - Airtable, Webflow, Make, Zapier, n8n
 - Stripe, Shopify, Meta/Facebook, TikTok
 - Custom APIs & low-code platforms
+---
+With over 6 years of automation experience and deep expertise in platforms like **Airtable**, **Make.com**, and **Zapier**, I now specialize in building high-performance Airtable-powered systems that streamline operations and scale intelligently.
+
+I design Airtable-centric workflows for:
+
+- 🔄 **Two-way Syncing** (Airtable ⇄ CRMs like HubSpot, GoHighLevel, Pipedrive)  
+- 📄 **Automated Docs & Reports** (Google Docs, Slides, PDFs)  
+- 🧠 **AI Integrations** (OpenAI, Gemini, Claude for content, tagging, decision-making)  
+- 🛠️ **Custom API Workflows** (Webhooks, REST API calls, JSON data handling)  
+- 📆 **Booking/Calendar Automation** (Calendly, Google Calendar, TidyCal)  
+- 🗂️ **Database & Lead Management** (Airtable as a mini-CRM or ops dashboard)  
+- ☁️ **Cloud & Self-hosted Solutions** (n8n, Supabase, Webflow, Notion)
+
+Whether you're using Airtable as a backend, interface, or automation hub—I build smart workflows that **reduce manual work, eliminate errors, and accelerate growth.**
+
+🔐 What I need to get started:
+
+- Your automation goal  
+- Access to required apps (securely shared)  
+- Any special logic or data structure
+
+Let’s turn your scattered processes into **streamlined, Airtable-driven clarity**.
 
 Want to hire or collaborate?  
 📧 [Contact Me on LinkedIn](https://www.linkedin.com/in/liveayon)
