@@ -20,27 +20,37 @@ This Airtable Automation script sends a POST request to a specified webhook URL 
    - `webhookUrl`: The target endpoint where the payload will be sent.
    - Any other variables you want to include in the payload (e.g., `name`, `email`, `recordId`, etc.).
 
-3. **Paste the Script Below**  
-   Use the following script in the script editor:
+3. **Paste the Script Below**
 
-   ```javascript
-   const config = input.config();
-   const { webhookUrl, ...payload } = config;  // Exclude webhookUrl
+Use the following script in the script editor:
 
-   if (!webhookUrl) {
-       console.log("❌ Error: webhookUrl is required");
-   } else {
-       try {
-           const response = await fetch(webhookUrl, {
-               method: "POST",
-               headers: { "Content-Type": "application/json" },
-               body: JSON.stringify(payload)  // All other fields sent here
-           });
-           console.log(`✅ Success: ${response.status} ${response.statusText}`);
-       } catch (error) {
-           console.log(`❌ Failed: ${error.message}`);
-       }
-   }
+```javascript
+const config = input.config();
+
+// Safely extract webhookUrl and remove it from payload
+const webhookUrl = config["webhookUrl"];
+const payload = Object.assign({}, config);
+delete payload["webhookUrl"];
+
+if (!webhookUrl) {
+    throw new Error("❌ Error: webhookUrl is required");
+}
+
+try {
+    const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    console.log(`✅ Success: ${response.status} ${response.statusText}`);
+    const responseText = await response.text();
+    console.log(`🔁 Response body: ${responseText}`);
+} catch (error) {
+    console.error(`❌ Failed to send webhook: ${error.message}`);
+    throw error;
+}
+
    ```
 
 4. **Test the Automation**  
