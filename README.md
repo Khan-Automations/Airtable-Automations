@@ -31,6 +31,7 @@ If you’re building with **Airtable, Webflow, Make, Notion, or external APIs** 
 | [Airtable → Webhook Payload Sender](airtable-webhook-payload-sender.md) | Send selected Airtable record field values as a POST request to a webhook URL for integration with external services. |
 | [Airwallex Webhook Signature Verification via Cloudflare Worker](airwallex-cloudflare-worker.md) | Verify Airwallex webhook signatures using HMAC SHA-256 in a Cloudflare Worker, then forward verified payloads to Make.com. |
 | [Fetch Webflow Item Fields into Airtable](fetch-webflow-item-fields.md) | Retrieve specific field values from a Webflow CMS item using Webflow |
+| [Find & Update Records by Field IDs with Match Logic](find-and-update-records-by-field-ids.md) | Search Airtable records by one or more field IDs using Exact or Partial matching and update specified fields in all matching records. Configure inputs via Airtable Automations. |
 <!-- script-list-end -->
 
 ---
